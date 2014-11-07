@@ -16,9 +16,13 @@ class GameWindow < Gosu::Window
     @background_image = Gosu::Image.new(self, "media/floor.jpg", true)
 
     @player = Player.new(self)
-    @player.warp(300,160)
-  end
+    @player.warp(320,160)
 
+    @lemon_anim = Gosu::Image::load_tiles(self, "media/lemon.png", 60,60,false)
+    @lemons = Array.new
+
+    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+  end
 
   def button_down id 
     close if id == Gosu::KbEscape
@@ -35,11 +39,19 @@ class GameWindow < Gosu::Window
       @player.accelerate
     end
     @player.move
+    @player.collect_lemons(@lemons)
+
+    if rand(100) < 4 and @lemons.size < 10 then
+      @lemons.push(Lemon.new(@lemon_anim))
+    end
+
   end
 
   def draw
+    @background_image.draw(0, 0, ZOrder::Background);
     @player.draw
-    @background_image.draw(0, 0, 0);
+    @lemons.each {|lemon| lemon.draw }
+    @font.draw("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
   end
 
 end
@@ -48,6 +60,7 @@ end
 class Player
   def initialize(window)
     @image = Gosu::Image.new(window, "media/nils.png",false)
+    @beep = Gosu::Sample.new(window, "media/beep_1.mp3")
     @x = @y = @vel_x = @vel_y = @angle = 0.0
     @score = 0
   end
@@ -79,10 +92,25 @@ class Player
     @vel_y *= 0.9
   end
 
-
   def draw 
     @image.draw_rot(@x, @y, 1, @angle)
+  end
 
+
+  def score
+    @score
+  end
+
+  def collect_lemons(lemons)
+    lemons.reject! do |lemon|
+      if Gosu::distance(@x, @y, lemon.x, lemon.y) < 50 then
+        @score += 1
+        @beep.play(0.5)
+        true
+      else
+        false
+      end
+    end
   end
 
 end
@@ -91,9 +119,8 @@ end
 class Lemon 
   attr_reader :x, :y
 
-  def initialize(window, animation)
+  def initialize(animation)
     @animation = animation
-    # @lemon = Gosu::Image.new(window, "media/lemon.png")
     @color = Gosu::Color.new(0xff000000)
     @color.red = rand(256 - 40) + 40
     @color.green = rand(256 - 40) + 40
