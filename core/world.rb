@@ -61,7 +61,7 @@ class World
       @lemons.push(Lemon.new(@lemon_anim))
     end
 
-    if rand(200) < current_score and @holes.size < 2  then
+    if rand(250) < current_score and @holes.size < 3  then
       @holes.push(Hole.new(@hole_anim))
     end
 

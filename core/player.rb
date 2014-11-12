@@ -10,12 +10,16 @@ class Player
 
     @beeps = [@beep1, @beep2, @beep3, @beep4, @beep5]
 
+    @mud = Gosu::Sample.new(window, "media/mud_1.mp3")
+    @mud2 = Gosu::Sample.new(window, "media/mud_2.mp3")
+    @muds = [@mud, @mud2]
+
     @x = @y = @vel_x = @vel_y = @angle = 0.0
     @score = 0
     @timer = Time.now + 10
     @count_down = 0
 
-    @speed = 0.5
+    @speed = 0.4
   end
 
   def warp(x,y)
@@ -36,8 +40,8 @@ class Player
   end
 
   def decelerate
-    @vel_x -= Gosu::offset_x(@angle, @speed-0.2)
-    @vel_y -= Gosu::offset_y(@angle, @speed-0.2)
+    @vel_x -= Gosu::offset_x(@angle, @speed > 0.2 ?  @speed-0.2 : @speed )
+    @vel_y -= Gosu::offset_y(@angle, @speed > 0.2 ?  @speed-0.2 : @speed )
   end
 
   def move
@@ -69,9 +73,10 @@ class Player
   def collect_lemons(lemons)
     lemons.reject! do |lemon|
       if Gosu::distance(@x, @y, lemon.x, lemon.y) < 50 then
+        @speed += 0.05 if @speed < 0.7
         @timer += 1
         @score += 1
-        @beeps[rand(@beeps.count)].play(0.5)
+        @beeps[rand(@beeps.count)].play(rand(0.2) + 0.3)
         true
       else
         false
@@ -81,8 +86,10 @@ class Player
 
   def sink_hole(holes)
     holes.reject! do |hole|
-      if Gosu::distance(@x, @y, hole.x, hole.y) < 20 then
-        @speed -= 0.1
+      if Gosu::distance(@x, @y, hole.x, hole.y) < 60 then
+        @speed -= 0.2
+        @speed = 0.1 unless @speed >= 0.2
+        @muds[rand(@muds.count)].play(rand(0.2) + 0.3)
         true
       elsif (Time.now - hole.created_at) > 5
         true
