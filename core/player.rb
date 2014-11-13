@@ -19,7 +19,7 @@ class Player
     @timer = Time.now + 10
     @count_down = 0
 
-    @speed = 0.4
+    @speed = 0.35
   end
 
   def warp(x,y)
@@ -45,10 +45,14 @@ class Player
   end
 
   def move
-    @x += @vel_x
-    @y += @vel_y
-    @x %= 640
-    @y %= 480
+    @x += @vel_x if @x <= 640 && @x >= 1
+    @y += @vel_y if @y <= 480 && @y >= 1
+
+    @x -= 1 if @x >= 640
+    @x += 1 if @x <= 1
+
+    @y -= 1 if @y >= 480
+    @y += 1 if @y <= 1
 
     @vel_x *= 0.9
     @vel_y *= 0.9
@@ -72,11 +76,11 @@ class Player
 
   def collect_lemons(lemons)
     lemons.reject! do |lemon|
-      if Gosu::distance(@x, @y, lemon.x, lemon.y) < 50 then
-        @speed += 0.05 if @speed < 0.7
+      if Gosu::distance(@x, @y, lemon.x, lemon.y) < (lemon.l_width-5) then 
+        @speed += 0.05 if @speed < 0.65
         @timer += 1
         @score += 1
-        @beeps[rand(@beeps.count)].play(rand(0.2) + 0.3)
+        @beeps[rand(@beeps.count)].play(rand(0.1) + 0.4)
         true
       else
         false
@@ -86,10 +90,10 @@ class Player
 
   def sink_hole(holes)
     holes.reject! do |hole|
-      if Gosu::distance(@x, @y, hole.x, hole.y) < 60 then
-        @speed -= 0.2
-        @speed = 0.1 unless @speed >= 0.2
-        @muds[rand(@muds.count)].play(rand(0.2) + 0.3)
+      if Gosu::distance(@x, @y, hole.x, hole.y) < (hole.h_width - 5) then
+        @speed -= 0.15
+        @speed = 0.16 unless @speed >= 0.2
+        @muds[rand(@muds.count)].play(rand(0.1) + 0.4)
         true
       elsif (Time.now - hole.created_at) > 5
         true
@@ -98,5 +102,4 @@ class Player
       end
     end
   end
-
 end

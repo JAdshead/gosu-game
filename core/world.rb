@@ -29,7 +29,6 @@ class World
     @player.draw
     @lemons.each {|lemon| lemon.draw }
     @holes.each {|hole| hole.draw }
-
     @font.draw("Score: #{@player.score}  Time Left: #{@player.time_left}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
   end
 
@@ -61,7 +60,7 @@ class World
       @lemons.push(Lemon.new(@lemon_anim))
     end
 
-    if rand(250) < current_score and @holes.size < 3  then
+    if rand(500) < ((current_score/5) % 10) and @holes.size < (current_score / 5.0)  then
       @holes.push(Hole.new(@hole_anim))
     end
 

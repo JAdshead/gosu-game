@@ -4,7 +4,7 @@ class GameWindow < Gosu::Window
     @window_width = 640
     @window_height = 480
     super @window_width, @window_height, false
-
+    @sound = true
     self.caption = "Nils the Ultimate"
    
     @menu = Menu.new self
@@ -14,7 +14,6 @@ class GameWindow < Gosu::Window
 
     @win_sound = Gosu::Sample.new(self, "media/win.wav")
     @lose_sound = Gosu::Sample.new(self, "media/fail.wav")
-
   end
 
   attr_accessor :pause, :top_score
@@ -32,7 +31,8 @@ class GameWindow < Gosu::Window
     when Gosu::KbP
       @pause = !@pause if @menu.display === false
       @menu.display = true if @menu.display === false
-    when Gosu::KbBackspace
+    when Gosu::KbS
+      puts "sound #{@sound}"
       @sound = !@sound if @menu.display === false
     end
   end
@@ -58,7 +58,7 @@ class GameWindow < Gosu::Window
   end
 
   def end_game
-    top_score <= find_score ? @win_sound.play(0.7) : @lose_sound.play(0.5)
+    top_score <= find_score ? @win_sound.play(0.6) : @lose_sound.play(0.5)
     @pause = true
     @menu.display = true
   end
