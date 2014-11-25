@@ -5,18 +5,18 @@ class Lemon
     @animation = animation
     @color = Gosu::Color.new(0xff000000)
     @color.red = rand(256 - 100) + 100
-    @color.green = rand(256 - 100) + 100
-    @color.blue = rand(256 - 100) + 100
+    @color.green = rand(256 - 200) + 200
+    @color.blue = rand(256 - 200) + 200
     @x = rand * 640
     @y = rand * 480
-    @size = rand(0.8..1.2).round(2)
-    @l_width = 50
+    @size = rand(0.6..0.7).round(2)
+    @l_width = 100
   end
 
   def draw
     img = @animation[Gosu::milliseconds / 100 % @animation.size];
     @l_width = img.width * @size
-    img.draw(@x - img.width / 2.0, @y - img.height / 2.0, ZOrder::Lemon, @size, @size, @color)
+    img.draw(@x - (img.width * @size) / 2.0, @y - (img.height*@size) / 2.0, ZOrder::Lemon, @size, @size, @color)
   end
 
 end

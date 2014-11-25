@@ -14,12 +14,17 @@ class GameWindow < Gosu::Window
 
     @win_sound = Gosu::Sample.new(self, "media/win.wav")
     @lose_sound = Gosu::Sample.new(self, "media/fail.wav")
+
+    @music = Gosu::Song.new(self, "media/aerobic_champion.mp3")
+    @music.volume = 0.5
+
   end
 
   attr_accessor :pause, :top_score
 
   def new_game
     @world = World.new self
+    # @music.play(looping = true)
   end
 
 
@@ -45,9 +50,14 @@ class GameWindow < Gosu::Window
   def update
     if !pause
       end_game unless @world.in_play?
+
     end
     @menu.update if pause
+    @music.play(looping = true) if !pause
+    @music.pause if pause
+
     @world.update if not pause
+
     if @top_score <= find_score
       @top_score = find_score
     end
@@ -58,6 +68,7 @@ class GameWindow < Gosu::Window
   end
 
   def end_game
+    # @music.pause
     top_score <= find_score ? @win_sound.play(0.6) : @lose_sound.play(0.5)
     @pause = true
     @menu.display = true

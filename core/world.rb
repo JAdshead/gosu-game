@@ -6,10 +6,11 @@ class World
 
     @font = Gosu::Font.new(@window, Gosu::default_font_name, 20)
 
+    
     @player = Player.new(@window)
     @player.warp(320,160)
 
-    @lemon_anim = Gosu::Image::load_tiles(@window, "media/lemon.png", 60,60,false)
+    @lemon_anim = Gosu::Image::load_tiles(@window, "media/lemon.png", 100,100,false)
     @hole_anim = Gosu::Image::load_tiles(@window, "media/black_hole.png", 80,80,false)
 
     @holes = Array.new
@@ -37,7 +38,6 @@ class World
   end
 
   def update
-
     if @window.button_down? Gosu::KbLeft or @window.button_down? Gosu::GpLeft then
       @player.turn_left
     end
@@ -46,6 +46,10 @@ class World
     end
     if @window.button_down? Gosu::KbUp or @window.button_down? Gosu::GpButton0 then
       @player.accelerate
+      @player.moving
+    end
+    if !(@window.button_down? Gosu::KbUp) && !(@window.button_down? Gosu::GpButton0) then
+      @player.not_moving
     end
     if @window.button_down? Gosu::KbDown or @window.button_down? Gosu::GpButton1 then
       @player.decelerate
@@ -56,11 +60,11 @@ class World
 
     @player.update
 
-    if rand(100) < 5 and @lemons.size < 2 then
+    if rand(100) < 5 and @lemons.size < 1 then
       @lemons.push(Lemon.new(@lemon_anim))
     end
 
-    if rand(500) < ((current_score/5) % 10) and @holes.size < (current_score / 5.0)  then
+    if rand(1000-(current_score*2)) < ((current_score/5)) and @holes.size < (current_score/5.0) and @holes.size <= 6  then
       @holes.push(Hole.new(@hole_anim))
     end
 

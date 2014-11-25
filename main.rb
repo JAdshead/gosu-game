@@ -1,7 +1,7 @@
 require 'gosu'
 
 module ZOrder
-  Background, Lemon, Player, Hole, UI = *0..4
+  Background,Hole, Lemon, Player, UI = *0..4
 end
 
 require_relative "core/game_window"
