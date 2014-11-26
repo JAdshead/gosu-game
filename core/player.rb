@@ -20,7 +20,7 @@ class Player
     @x = @y = @vel_x = @vel_y = @angle = 0.0
     @score = 0
     @moving = false
-    @player_width = 0.8
+    @player_width = 0.9
     @timer = Time.now + 10
     @count_down = 0
     @speed = 0.35
@@ -84,10 +84,10 @@ class Player
   end
 
   def update_width
-    if !@moving && @player_width <= 0.9 || @player_width <= (1.0-@speed + 0.2) then
+    if !@moving && @player_width <= 1.0 || @player_width <= (1.0-@speed + 0.2) then
       @player_width += 0.01 
     end
-    if @moving && @player_width >= (1-@speed) &&  @player_width >= 0.4 then
+    if @moving && @player_width >= (1-@speed) &&  @player_width >= 0.5 then
       @player_width -= 0.01 
     end
   end
