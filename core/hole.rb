@@ -5,9 +5,9 @@ class Hole
     @animation = animation
     @x = rand * 640
     @y = rand * 480
-    @size = rand(0.6..1.0).round(2)
+    @size = rand(0.5..0.7).round(2)
     @created_at = Time.now
-    @h_width = 50
+    @h_width = 40
   end
 
   def draw

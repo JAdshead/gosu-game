@@ -3,7 +3,7 @@ class GameWindow < Gosu::Window
   def initialize
     @window_width = 640
     @window_height = 480
-    super @window_width, @window_height, false
+    super @window_width, @window_height, true
     @sound = true
     self.caption = "Nils the Ultimate"
    
