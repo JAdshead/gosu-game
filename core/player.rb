@@ -121,8 +121,8 @@ class Player
         true
       elsif Gosu::distance(@x, @y, hole.x, hole.y) < (hole.h_width - 7)
         @speed -= 0.05
-        @speed = 0.45 if @speed >= 0.6
-        @speed = 0.1 unless @speed >= 1
+        @speed = 0.35 if @speed >= 0.35
+        @speed = 0.25 unless @speed <= 0.25
         @muds[rand(@muds.count)].play(rand(0.1) + 0.8)
         true
       elsif (Time.now - hole.created_at) > 30
